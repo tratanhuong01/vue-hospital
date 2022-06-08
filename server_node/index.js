@@ -13,7 +13,7 @@ socketIo.on("connection", (socket) => {
   ///Handle khi có connect từ client tới
 
   socket.on("chatMessage", (data) => {
-    socketIo.emit(`_chatMessage.${data}`, data);
+    socketIo.emit(`_chatMessage.${data.idgroupchat}.${data._id}`, data);
   });
 
   socket.on("requestJoin", (data) => {

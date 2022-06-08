@@ -18,7 +18,7 @@
                     <div>
                         <img src="https://berrydashboard.io/static/media/user-round.13b5a31b.svg" alt="" srcset="">
                         <span class="bx bx-user-pin"></span>
-                        <span class="bx bx-log-out hidden"></span>
+                        <span @click="logOut" class="bx bx-log-out"></span>
                     </div>
                 </div>
             </div>
@@ -26,23 +26,29 @@
     </div>
 </template>
 <script>
-import {mapState} from 'vuex'
+import { mapMutations, mapState } from 'vuex'
 import { inject } from 'vue'
 export default {
-    setup(){
+    setup() {
         const slideMenu = inject('btn_menu');
-        return {slideMenu};
+        return { slideMenu };
     },
-    computed:{
+    computed: {
         ...mapState(['admin']),
     },
     mounted() {
-        console.log(this.$store.state.admin);
+
     },
-    methods:{
-        toggleMenu:function(){
+    methods: {
+        ...mapMutations(['setadmin']),
+        toggleMenu: function () {
             // this.slideMenu.classList.toggle('active');
-            this.slideMenu =! this.slideMenu
+            this.slideMenu = !this.slideMenu
+        },
+        logOut: function () {
+            this.setadmin(null);
+            window.localStorage.removeItem('K-admin');
+            this.$router.push({ name: 'admin_login' })
         }
     }
 }

@@ -14,7 +14,7 @@ class C_book_list extends Controller
     {
         $result = DB::select("SELECT * , m_book_lists.fullname as 'fullname_main' , m_book_lists.phone 
         as 'phone_main', m_book_lists.email as 'email_main' , m_book_lists.created_at as 'created_at_main' ,
-        m__admins.name as 'name_doctor' , m_info_admins.avatar as 'avatar_doctor' , m_users.gender as 'gender_main' ,
+        m__admins.name as 'name_doctor' , m_info_admins.avatar as 'avatar_doctor' , m_book_lists.gender as 'gender_main' ,
         m_users.avatar as 'avatar_user' , m_book_lists.address as 'address_main' , m_book_lists.id as 'idbooklist_main',
         m_book_lists.status as 'status_book_list' FROM m_book_lists INNER JOIN m__admins 
         ON m_book_lists.iddoctor = m__admins.id INNER JOIN m_info_admins ON 
@@ -43,7 +43,7 @@ class C_book_list extends Controller
     {
         $result = DB::select("SELECT * , m_book_lists.fullname as 'fullname_main' , m_book_lists.phone 
         as 'phone_main', m_book_lists.email as 'email_main' , m_book_lists.created_at as 'created_at_main' ,
-        m__admins.name as 'name_doctor' , m_info_admins.avatar as 'avatar_doctor' , m_users.gender as 'gender_main' ,
+        m__admins.name as 'name_doctor' , m_info_admins.avatar as 'avatar_doctor' , m_book_lists.gender as 'gender_main' ,
         m_users.avatar as 'avatar_user' , m_book_lists.address as 'address_main', m_book_lists.id as 'idbooklist_main' ,
         m_book_lists.status as 'status_book_list' FROM m_book_lists INNER JOIN m__admins 
         ON m_book_lists.iddoctor = m__admins.id INNER JOIN m_info_admins ON 
@@ -83,7 +83,18 @@ class C_book_list extends Controller
     public function updateStatusBook(Request $request)
     {
         DB::update('UPDATE m_book_lists SET status = ? WHERE id = ?', [$request->status, $request->id]);
-        return response()->json(['status' => true]);
+        $result = DB::select("SELECT * , m_book_lists.fullname as 'fullname_main' , m_book_lists.phone 
+        as 'phone_main', m_book_lists.email as 'email_main' , m_book_lists.created_at as 'created_at_main' ,
+        m__admins.name as 'name_doctor' , m_info_admins.avatar as 'avatar_doctor' , m_book_lists.gender as 'gender_main' ,
+        m_users.avatar as 'avatar_user' , m_book_lists.address as 'address_main', m_book_lists.id as 'idbooklist_main' ,
+        m_book_lists.status as 'status_book_list' FROM m_book_lists INNER JOIN m__admins 
+        ON m_book_lists.iddoctor = m__admins.id INNER JOIN m_info_admins ON 
+        m_info_admins.idadmin = m__admins.id INNER JOIN m_specical_lists ON 
+        m_specical_lists.id = m_info_admins.idspecicallist INNER JOIN m_time_books ON 
+        m_book_lists.idtimebook = m_time_books.id INNER JOIN m_time_doctors ON 
+        m_book_lists.idtimedoctor = m_time_doctors.id INNER JOIN m_users ON m_users.id = m_book_lists.iduser 
+        WHERE m_book_lists.id = ? ", [$request->id]);
+        return response()->json(['data' => sizeof($result) === 0 ? null : $result[0], 'status' => true]);
     }
 
     public function deleteBookList(Request $request)
@@ -94,7 +105,18 @@ class C_book_list extends Controller
 
     public function updateStatus(Request $request)
     {
-        DB::table("m_book_lists")->where('id', $request->id)->update(['status' => $request->status]);
-        return response()->json(['data' => true]);
+        DB::update('UPDATE m_book_lists SET status = ? WHERE id = ?', [$request->status, $request->id]);
+        $result = DB::select("SELECT * , m_book_lists.fullname as 'fullname_main' , m_book_lists.phone 
+        as 'phone_main', m_book_lists.email as 'email_main' , m_book_lists.created_at as 'created_at_main' ,
+        m__admins.name as 'name_doctor' , m_info_admins.avatar as 'avatar_doctor' , m_book_lists.gender as 'gender_main' ,
+        m_users.avatar as 'avatar_user' , m_book_lists.address as 'address_main', m_book_lists.id as 'idbooklist_main' ,
+        m_book_lists.status as 'status_book_list' FROM m_book_lists INNER JOIN m__admins 
+        ON m_book_lists.iddoctor = m__admins.id INNER JOIN m_info_admins ON 
+        m_info_admins.idadmin = m__admins.id INNER JOIN m_specical_lists ON 
+        m_specical_lists.id = m_info_admins.idspecicallist INNER JOIN m_time_books ON 
+        m_book_lists.idtimebook = m_time_books.id INNER JOIN m_time_doctors ON 
+        m_book_lists.idtimedoctor = m_time_doctors.id INNER JOIN m_users ON m_users.id = m_book_lists.iduser 
+        WHERE m_book_lists.id = ? ", [$request->id]);
+        return response()->json(['data' => sizeof($result) === 0 ? null : $result[0], 'status' => true]);
     }
 }

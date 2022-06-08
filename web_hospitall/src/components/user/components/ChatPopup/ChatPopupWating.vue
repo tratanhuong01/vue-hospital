@@ -10,14 +10,17 @@
 import { mapState } from 'vuex';
 
 export default {
-    props: ['setIsLogin'],
+    props: ['setIsLogin', 'doctor', 'setData'],
     computed: {
         ...mapState(['socket'])
     },
-    mounted() {
-        this.socket.on(`_acceptJoin.all`, () => {
-            this.setIsLogin(2);
-        });
+    watch: {
+        doctor: function (newData) {
+            this.socket.on(`_acceptJoin.${newData?.idadmin}`, (data) => {
+                this.setData(data);
+                this.setIsLogin(2);
+            });
+        }
     }
 }
 </script>

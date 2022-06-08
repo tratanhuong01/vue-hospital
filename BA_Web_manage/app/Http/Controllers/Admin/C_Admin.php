@@ -166,4 +166,13 @@ class C_Admin extends Controller
         m__admins.sdt LIKE '%" . $request->value . "%') ");
         return response()->json(['data' => $result]);
     }
+
+    public function randomDoctor()
+    {
+        $result = DB::select("SELECT * , m__admins.id as 'idadmin'  FROM m__admins LEFT JOIN m_info_admins ON m__admins.id = 
+        m_info_admins.idadmin INNER JOIN m_specical_lists ON  m_info_admins.idspecicallist = m_specical_lists.id 
+        WHERE m__admins.role != 0");
+        $number = mt_rand(0, sizeof($result));
+        return response()->json(['data' => sizeof($result) === 0 ? null : $result[$number - 1 < 0 ? 0 : $number - 1]]);
+    }
 }

@@ -53,7 +53,8 @@ class C_User extends Controller
     {
         if (auth('user')->attempt([
             'email' => $request->email,
-            'password' => $request->password
+            'password' => $request->password,
+            'status' => 1
         ])) {
             $user = M_users::where('email', '=', $request->email)->first();
             $user->token = $user->createToken('User', ['user'])->accessToken;
@@ -92,6 +93,15 @@ class C_User extends Controller
             }
         }
         $result = DB::select('SELECT * FROM m_users WHERE id = ? ', [$request->id]);
+        return response()->json(['data' => sizeof($result) === 0 ? null : $result[0]]);
+    }
+
+    public function updateStatus(Request $request)
+    {
+        DB::table('m_users')->where('m_users.id', $request->id)->update([
+            'status' => $request->status
+        ]);
+        $result = DB::select("SELECT * FROM m_users WHERE m_users.id = $request->id");
         return response()->json(['data' => sizeof($result) === 0 ? null : $result[0]]);
     }
 

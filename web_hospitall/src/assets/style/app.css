@@ -160,7 +160,7 @@ input::-webkit-inner-spin-button {
 .chat__item--time p:nth-child(1) {
   color: gray;
   opacity: 0.6;
-  font-weight: 800;
+  font-weight: 500;
   font-size: 1.2rem;
   margin-bottom: 1rem;
 }
@@ -405,6 +405,21 @@ input::-webkit-inner-spin-button {
   margin-bottom: 1rem;
 }
 
+.green {
+  background-color: green;
+}
+
+.red {
+  background-color: red;
+}
+
+.radio-option {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  padding: 2rem;
+}
+
 .chat-popup__form--close {
   position: absolute;
   top: 0.5rem;
@@ -415,6 +430,8 @@ input::-webkit-inner-spin-button {
 
 .chat-popup__form .chat__right--content--content {
   height: 32rem;
+  overflow: auto;
+  max-height: 32rem;
   flex: unset;
 }
 
@@ -644,7 +661,6 @@ input::-webkit-inner-spin-button {
 }
 
 .red {
-  background-color: green;
   color: #fff;
   font-size: 1.2rem;
   font-weight: 500;
@@ -667,4 +683,86 @@ input::-webkit-inner-spin-button {
   font-size: 4rem;
   margin-bottom: 2rem;
   color: var(--color-bold);
+}
+
+.request-join {
+  z-index: 1000;
+  max-width: 60rem;
+  padding: 2.4rem 1.2rem;
+  background-color: #fff;
+  border-radius: 2rem;
+  position: fixed;
+  top: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.request-join .request-join-top {
+  display: flex;
+  margin-bottom: 2rem;
+  align-items: center;
+}
+
+.request-join .request-join-top img {
+  width: 4.8rem;
+  height: 4.8rem;
+  object-fit: cover;
+  border-radius: 100rem;
+}
+
+.request-join .request-join-top>div {
+  padding-left: 2rem;
+}
+
+.request-join .request-join-top>div p:nth-child(2) {
+  color: gray;
+  opacity: 0.6;
+  font-size: 1.4rem;
+  margin-top: 0;
+}
+
+.request-join .request-join-content {
+  display: flex;
+  align-items: center;
+}
+
+.request-join .request-join-content>p {
+  font-size: 1.4rem;
+  color: gray;
+  opacity: 0.6;
+  display: flex;
+  align-items: center;
+}
+
+.request-join .request-join-content>p>i {
+  color: blue;
+  opacity: 0.8;
+  font-size: 3.2rem;
+  margin-right: 2rem;
+}
+
+.request-join .request-join-content>ul {
+  flex: 1;
+  font-size: 1.4rem;
+  padding-left: 4rem;
+  padding-right: 2rem;
+}
+
+.request-join .request-join-content>ul>li {
+  color: blue;
+  opacity: 0.8;
+  white-space: nowrap;
+  cursor: pointer;
+  margin-bottom: 0.8rem;
+  font-weight: 600;
+}
+
+.request-join-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 999;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.711);
 }

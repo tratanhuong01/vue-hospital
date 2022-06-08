@@ -43,20 +43,24 @@ export default {
     methods: {
         ...mapMutations(["setBook"]),
         clickItemTime: function (time, doctor, date) {
-            if (time && !this.isDetail) {
-                this.setBook({
-                    time,
-                    doctor,
-                    date
-                })
-                this.$router.push({
-                    name: "DoctorDetail", params: {
-                        slug: this.$route.params.slug
-                    }
-                })
-            }
-            else {
-                this.setBook({ ...this.book, time, date });
+            let index = [...doctor.books].findIndex(dt => dt.idtimebook === time.id &&
+                Number(dt.datebook.split('-')[1]) === this.selected.month && Number(dt.datebook.split('-')[2]) === this.selected.day);
+            if (index === -1) {
+                if (time && !this.isDetail) {
+                    this.setBook({
+                        time,
+                        doctor,
+                        date
+                    })
+                    this.$router.push({
+                        name: "DoctorDetail", params: {
+                            slug: this.$route.params.slug
+                        }
+                    })
+                }
+                else {
+                    this.setBook({ ...this.book, time, date });
+                }
             }
         },
         handleSelectedCalendar: function (calendar) {

@@ -49,9 +49,9 @@ export default {
             const result = await this.onSubmit();
             if (result) {
                 this.closeModal();
+                this.loadingButton = false;
+                this.disabledButton = false;
             }
-            this.loadingButton = false;
-            this.disabledButton = false;
         }
     }
 }

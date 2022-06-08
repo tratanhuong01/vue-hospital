@@ -29,10 +29,15 @@
                 <ItemStatus :statusMain="item.status_book_list"></ItemStatus>
             </td>
             <td>
-                <span @click="editItem(item.idadmin)" class="bx bx-pencil"></span>
+                <span @click="editItem(item.idbooklist_main, item.status_book_list)" class="bx bx-pencil"
+                    :class="item.status_book_list === -1 || item.status_book_list === 2 ? 'disabled' : ''"></span>
             </td>
         </tr>
     </Table>
+    <ModalOptionData :list="[{ id: -1, name: 'Huỷ lịch', status: -1, hide: true }, { id: 1, name: 'Duyệt lịch', status: 1 },
+    { id: 2, name: 'Đã khám', status: 2 }]" table="booklist" :setList="setList" name="booklist-status"
+        title="Lịch đặt khám" :id="id" :status="status">
+    </ModalOptionData>
     </Base>
 </template>
 <script>
@@ -40,13 +45,20 @@ import Base from "./Base.vue";
 import Table from "../Table.vue";
 import ItemStatus from '../../user/components/ItemComponent/ItemStatus.vue';
 import Request from "../../../Request";
+import ModalOptionData from "../modal/ModalOptionData.vue";
+import { mapMutations, mapState } from "vuex";
 export default {
     components: {
         Base,
         Table,
-        ItemStatus
+        ItemStatus,
+        ModalOptionData
+    },
+    computed: {
+        ...mapState(['modal'])
     },
     methods: {
+        ...mapMutations(['setModal']),
         onInput: function (event) {
             this.loading = true;
             this.counter += 1;
@@ -63,9 +75,30 @@ export default {
                 }
             }, 300);
         },
+        editItem: function (id, status) {
+            this.id = id;
+            if (status !== -1 && status !== 2) {
+                this.status = status;
+                this.setModal({ ...this.modal, data: true })
+            }
+        },
+        setList: function (item) {
+            const index = [...this.list].findIndex(dt => Number(dt.idbooklist_main) === Number(item.idbooklist_main));
+            if (index !== -1) {
+                let clone = [...this.list];
+                clone[index] = item;
+                console.log(clone[index].status_book_list);
+                this.list = clone;
+            }
+            else {
+                this.list = [...this.list, item];
+            }
+        }
     },
     data() {
         return {
+            id: null,
+            status: -1,
             list: [],
             loading: true,
             counter: 0,

@@ -41,6 +41,11 @@ export default {
             }
         },
     },
+    watch: {
+        statusMain: function (newData) {
+            this.statusItem(newData);
+        }
+    },
     mounted() {
         this.statusItem(this.statusMain);
     }

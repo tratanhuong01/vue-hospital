@@ -28,6 +28,7 @@ Route::get('/admin-information', 'Admin\C_Admin@adminAuth')->middleware(['auth:a
 //admin 
 Route::get('/doctors', 'Admin\C_Admin@getDoctor');
 Route::get('/doctor-admin', 'Admin\C_Admin@getDoctorAdmin');
+Route::get('/doctor-random', 'Admin\C_Admin@randomDoctor');
 Route::post('/doctor-search', 'Admin\C_Admin@searchAdmin');
 Route::post('/doctor-slug', 'Admin\C_Admin@getDoctorBySlug');
 Route::post('/doctors', 'Admin\C_Admin@addDoctor');
@@ -41,6 +42,7 @@ Route::post('/user-register-check', 'User\C_User@confirmEmail');
 Route::post('/user-register', 'User\C_User@register');
 Route::post('/user-login', 'User\C_User@login');
 Route::post('/user-avatar', 'User\C_User@updateAvatar');
+Route::post('/user-status', 'User\C_User@updateStatus');
 Route::get('/user-information', 'User\C_User@userAuth')->middleware(['auth:api_user', 'scopes:user']);
 Route::get("/users", 'User\C_User@getAllUser');
 Route::put("/users", 'User\C_User@updateUser');
@@ -117,9 +119,10 @@ Route::post('districts', 'C_address@getDistrictByProvince');
 Route::post('wards', 'C_address@getWardByDistrict');
 
 // group chat
-Route::get('groupChats', 'C_group_chat@getGroupChat');
+Route::get('groupChats/{idadmin}', 'C_group_chat@getGroupChat');
 Route::post('groupChats', 'C_group_chat@addGroupChat');
 
 // chat
 Route::get('chats/{idgroupchat}', 'C_chat@getChat');
+Route::get('chat-admin/{idadmin}', 'C_chat@getChatByIdAdmin');
 Route::post('chats', 'C_chat@addChat');

@@ -17,6 +17,7 @@ class CreateMGroupChatsTable extends Migration
             $table->increments('id');
             $table->string('fullname');
             $table->string('phone');
+            $table->string('user');
             $table->timestamps();
         });
     }

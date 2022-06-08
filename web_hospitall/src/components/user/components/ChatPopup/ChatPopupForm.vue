@@ -12,9 +12,9 @@
 import { mapState } from 'vuex';
 import { REGEX_NUMBER_PHONE } from '../../../../Config';
 import InputComponent from '../../../manage/InputComponent.vue';
-import { v4 } from 'uuid';
+import Request from '../../../../Request';
 export default {
-    props: ['setIsLogin'],
+    props: ['setIsLogin', 'setDoctor', 'id'],
     components: { InputComponent },
     computed: {
         ...mapState(['socket'])
@@ -32,25 +32,27 @@ export default {
                     break;
             }
         },
-        onSubmit: function () {
+        onSubmit: async function () {
             this.fullname.error = this.fullname.value.length === 0
             this.phone.error = this.phone.value.length === 0 ? 1 :
                 !this.phone.value.match(REGEX_NUMBER_PHONE) ? 2 : false
 
             if (!this.fullname.error && !this.phone.error) {
+                this.setIsLogin(1);
+                const result = await Request.Get('/doctor-random');
+                this.setDoctor(result.data.data);
                 this.socket.emit('requestJoin', {
                     fullname: this.fullname.value,
                     phone: this.phone.value,
-                    id: 'all',
-
+                    id: result.data.data?.idadmin,
+                    userS: this.id,
+                    groupChat: null
                 })
-                this.setIsLogin(1);
             }
         }
     },
     data() {
         return {
-            id: v4(),
             fullname: {
                 value: '',
                 error: false

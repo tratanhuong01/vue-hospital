@@ -1,6 +1,6 @@
 <template>
     <Base :onInput="onInput">
-    <Table :heading="['Ảnh đại diện', 'Họ tên', 'Số điện thoại', 'Email', 'Tình trạng']" hideCrud="true"
+    <Table :heading="['Ảnh đại diện', 'Họ tên', 'Số điện thoại', 'Email', 'Tình trạng', 'Sửa']" :hideCrud="true"
         :title="'Danh sách người dùng'" :loading="loading" :list="list">
         <tr v-for="(item, index) in list" :key="item.id">
             <td>{{ index + 1 }}</td>
@@ -21,8 +21,14 @@
                 <span :class="item.status === 1 ? 'green' : 'red'">
                     {{ item.status === 1 ? 'Bình thường' : 'Khoá' }}</span>
             </td>
+            <td>
+                <span @click="editItem(item.id, item.status)" class="bx bx-pencil"></span>
+            </td>
         </tr>
     </Table>
+    <ModalOptionData v-if="modal.data" title="Người dùng" name="status-user" :setList="setList" table="user" :id="id"
+        :list="[{ id: 1, name: 'Khoá', status: 0 }, { id: 2, name: 'Bình thường', status: 1 }]" :status="status">
+    </ModalOptionData>
     </Base>
 </template>
 <script>
@@ -30,12 +36,19 @@ import Base from "./Base.vue";
 import Table from "../Table.vue";
 import Request from "../../../Request";
 import { URL_IMAGE } from "../../../Config";
+import { mapMutations, mapState } from "vuex";
+import ModalOptionData from '../modal/ModalOptionData.vue';
 export default {
     components: {
         Base,
-        Table
+        Table,
+        ModalOptionData
+    },
+    computed: {
+        ...mapState(['modal'])
     },
     methods: {
+        ...mapMutations(['setModal']),
         onInput: function (event) {
             this.loading = true;
             this.counter += 1;
@@ -52,9 +65,27 @@ export default {
                 }
             }, 300);
         },
+        editItem: function (id, status) {
+            this.id = id;
+            this.status = status;
+            this.setModal({ ...this.modal, data: true })
+        },
+        setList: function (item) {
+            const index = [...this.list].findIndex(dt => dt.id === item.id);
+            if (index !== -1) {
+                let clone = [...this.list];
+                clone[index] = item;
+                this.list = clone;
+            }
+            else {
+                this.list = [...this.list, item];
+            }
+        }
     },
     data() {
         return {
+            status: -1,
+            id: null,
             list: [],
             loading: true,
             urlImage: URL_IMAGE,
