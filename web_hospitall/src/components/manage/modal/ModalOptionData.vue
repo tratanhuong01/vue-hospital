@@ -1,11 +1,14 @@
 <template>
     <ModalAdmin :title="title" nameButton="Cập nhật tình trạng" :onSubmit="onSubmit">
-        <div v-for="item in list" :key="item.id" class="radio-option">
-            <input v-model="statusUpdate" @change="onChange($event)" type="radio" :name="name"
-                :value="`${item.status}`">
-            <label for="">
-                {{ item.name }}
-            </label>
+
+        <div v-for="item in list" :key="item.id">
+            <div class="radio-option" v-if="!item.hide">
+                <input v-model="statusUpdate" @change="onChange($event)" type="radio" :name="name"
+                    :value="`${item.status}`">
+                <label for="">
+                    {{ item.name }}
+                </label>
+            </div>
         </div>
     </ModalAdmin>
 </template>

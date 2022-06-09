@@ -14,13 +14,13 @@
                             <img :src="urlImage + item.thumbnail" alt="" srcset="">
                         </div>
                     </div>
-                    <h3>{{ item.title }}</h3>
-                    <ul>
+                    <h3 @click="handleClick(item)">{{ item.title }}</h3>
+                    <!-- <ul>
                         <li>Tầm soát và xác định COVID-19</li>
                         <li>Tầm soát và xác định COVID-19</li>
                         <li>Tầm soát và xác định COVID-19</li>
                     </ul>
-                    <p>XEM CHI TIẾT <span class="bx bx-chevrons-right"></span></p>
+                    <p>XEM CHI TIẾT <span class="bx bx-chevrons-right"></span></p> -->
                 </router-link>
             </div>
         </div>
@@ -35,6 +35,15 @@ export default {
         return {
             urlImage: URL_IMAGE,
             list: []
+        }
+    },
+    methods: {
+        handleClick: function (item) {
+            this.$router.push({
+                name: 'BlogDetail', params: {
+                    slug: item.slug_blog
+                }
+            })
         }
     },
     mounted() {

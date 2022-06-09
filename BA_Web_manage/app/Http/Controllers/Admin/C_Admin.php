@@ -33,7 +33,12 @@ class C_Admin extends Controller
             'username' => $request->username,
             'password' => $request->password
         ])) {
+            // $result = DB::select("SELECT avatar from m_info_admins INNER JOIN m__admins ON m__admins.id = m_info_admins.idadmin 
+            // WHERE m__admins.username = ? ", [$request->username]);
+            // if (sizeof($result) > 0) {
+            // }
             $Admin = M_Admin::Where('username', '=', $request->username)->first();
+            // $Admin->avatar = $result[0]->avatar;
             $Admin->token = $Admin->createToken('Admin', ['admin'])->accessToken;
             return response()->json($Admin);
         } {
@@ -48,12 +53,15 @@ class C_Admin extends Controller
 
     public function getDoctor()
     {
-        $result = DB::select("SELECT * , m__admins.id as 'idadmin'  FROM m__admins LEFT JOIN m_info_admins ON m__admins.id = m_info_admins.idadmin WHERE m__admins.role != 0");
+        $result = DB::select("SELECT * , m__admins.id as 'idadmin' FROM m__admins LEFT JOIN m_info_admins 
+        ON m__admins.id = m_info_admins.idadmin INNER JOIN m_specical_lists ON m_specical_lists.id = m_info_admins.idspecicallist  
+        WHERE m__admins.role != 0 ");
         $arrObj = [];
         $utils = new Utils;
         foreach ($result as $key => $value) {
             $books = DB::select("SELECT * FROM m_book_lists WHERE iddoctor = $value->idadmin AND datebook = CURDATE() AND dayofweek = " . ($utils->getWeekdayMain()));
-            $dates = DB::select("SELECT * FROM m_time_doctors WHERE idadmin = $value->idadmin");
+            $dates = DB::select("SELECT * FROM `m_time_doctors` WHERE m_time_doctors.day >= DAY(NOW()) AND m_time_doctors.month >= 
+            MONTH(NOW()) AND m_time_doctors.year >= YEAR(NOW()) AND m_time_doctors.idadmin = ? ", [$value->idadmin]);
             array_push($arrObj, ['info' => $value, 'books' => $books, 'dates' => $dates]);
         }
         return response()->json(['data' => $arrObj]);
@@ -67,7 +75,8 @@ class C_Admin extends Controller
         $utils = new Utils;
         foreach ($result as $key => $value) {
             $books = DB::select("SELECT * FROM m_book_lists WHERE iddoctor = $value->idadmin AND datebook = CURDATE() AND dayofweek = " . ($utils->getWeekdayMain()));
-            $dates = DB::select("SELECT * FROM m_time_doctors WHERE idadmin = $value->idadmin");
+            $dates = DB::select("SELECT * FROM `m_time_doctors` WHERE m_time_doctors.day >= DAY(NOW()) AND m_time_doctors.month >= 
+            MONTH(NOW()) AND m_time_doctors.year >= YEAR(NOW()) AND m_time_doctors.idadmin = ? ", [$value->idadmin]);
             array_push($arrObj, ['info' => $value, 'books' => $books, 'dates' => $dates]);
         }
         return response()->json(['data' => $arrObj]);
@@ -114,7 +123,8 @@ class C_Admin extends Controller
         $utils = new Utils;
         foreach ($result as $key => $value) {
             $books = DB::select("SELECT * FROM m_book_lists WHERE iddoctor = $value->idadmin AND datebook = CURDATE() AND dayofweek = " . ($utils->getWeekdayMain()));
-            $dates = DB::select("SELECT * FROM m_time_doctors WHERE idadmin = $value->idadmin");
+            $dates = DB::select("SELECT * FROM `m_time_doctors` WHERE m_time_doctors.day >= DAY(NOW()) AND m_time_doctors.month >= 
+            MONTH(NOW()) AND m_time_doctors.year >= YEAR(NOW()) AND m_time_doctors.idadmin = ? ", [$value->idadmin]);
             array_push($arrObj, ['info' => $value, 'books' => $books, 'dates' => $dates]);
         }
         return response()->json(['data' => sizeof($arrObj) === 0 ? null : $arrObj[0]]);
@@ -138,24 +148,28 @@ class C_Admin extends Controller
 
     public function updateDoctor(Request $request)
     {
-        $password = $request->updatePassword === 'true' ? Hash::make($request->password) : $request->password;
-        DB::table('m__admins')->where('m__admins.id', $request->idadmin)->update([
-            'username' => $request->username,
-            'name' => $request->fullname,
-            'sdt' => $request->phone,
-            'password' => $password
-        ]);
-        DB::table('m_info_admins')->where('m_info_admins.idadmin', $request->idadmin)->update([
-            'position' => $request->position,
-            'address' => $request->address,
-            'idspecicallist' => $request->idspecicallist,
-            'description_admin' => $request->description,
-            'avatar' => $request->avatar
-        ]);
-        $result = DB::select("SELECT * , m__admins.id as 'idadmin'  FROM m__admins LEFT JOIN m_info_admins ON m__admins.id = 
+        $admin = DB::select("SELECT * FROM m__admins WHERE m__admins.id = ?", [$request->idadmin]);
+        $admin = sizeof($admin) === 0 ? null : $admin[0];
+        if ($admin) {
+            $password = $request->updatePassword === 'true' ? Hash::make($request->password) : $admin->password;
+            DB::table('m__admins')->where('m__admins.id', $request->idadmin)->update([
+                'username' => $request->username,
+                'name' => $request->fullname,
+                'sdt' => $request->phone,
+                'password' => $password
+            ]);
+            DB::table('m_info_admins')->where('m_info_admins.idadmin', $request->idadmin)->update([
+                'position' => $request->position,
+                'address' => $request->address,
+                'idspecicallist' => $request->idspecicallist,
+                'description_admin' => $request->description,
+                'avatar' => $request->avatar
+            ]);
+            $result = DB::select("SELECT * , m__admins.id as 'idadmin'  FROM m__admins LEFT JOIN m_info_admins ON m__admins.id = 
         m_info_admins.idadmin INNER JOIN m_specical_lists ON  m_info_admins.idspecicallist = m_specical_lists.id 
         WHERE m__admins.id = ? ", [$request->idadmin]);
-        return response()->json(['data' => sizeof($result) === 0 ? null : $result[0]]);
+            return response()->json(['data' => sizeof($result) === 0 ? null : $result[0]]);
+        }
     }
 
     public function searchAdmin(Request $request)

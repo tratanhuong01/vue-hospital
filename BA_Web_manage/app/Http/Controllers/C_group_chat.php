@@ -8,6 +8,12 @@ use Illuminate\Support\Facades\DB;
 
 class C_group_chat extends Controller
 {
+    public function getAllGroupChat()
+    {
+        $result  = DB::select("SELECT * FROM m_group_chats");
+        return response()->json(['data' => $result]);
+    }
+
     public function addGroupChat(Request $request)
     {
         $mGroupChat = new M_group_chat;

@@ -1120,6 +1120,7 @@ select {
 }
 
 .order__item--left--image {
+  cursor: pointer;
   width: 16rem;
   height: 16rem;
   border-radius: 100rem;
@@ -1141,6 +1142,7 @@ select {
 }
 
 .order__item--left--content h3 {
+  cursor: pointer;
   color: var(--color);
   font-size: 1.8rem;
   margin-bottom: 1rem;

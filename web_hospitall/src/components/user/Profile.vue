@@ -67,12 +67,15 @@
         </div>
         <p class="profile__title">Lịch đặt khám</p>
         <div class="profile__content">
-            <ItemBookList v-for="item in list" :key="item.id" :item="item" />
+            <ItemBookList v-for="item in list" :key="item.id" :item="item" :setIdBookList="setIdBookList"
+                :setIdDoctor="setIdDoctor" />
         </div>
     </div>
     <div v-else class="loading__content">
         <span class="bx bx-loader loading"></span>
     </div>
+    <ModalReplyBookList v-if="modalUser.data" :iddoctor="iddoctor" :idbooklist="idbooklist" :setList="setList">
+    </ModalReplyBookList>
 </template>
 <script>
 import { mapMutations, mapState } from 'vuex';
@@ -80,10 +83,14 @@ import Request from '../../Request';
 import ItemBookList from './components/ItemComponent/ItemBookList.vue';
 import InputComponent from '../manage/InputComponent.vue';
 import { REGEX_EMAIL, REGEX_NUMBER_PHONE, URL_IMAGE } from '../../Config';
+import ModalReplyBookList from './modal/ModalReplyBookList.vue';
+
 export default {
-    components: { ItemBookList, InputComponent },
+    components: { ItemBookList, InputComponent, ModalReplyBookList },
     data() {
         return {
+            idbooklist: [],
+            iddoctor: [],
             list: [],
             loading: true,
             fullname: {
@@ -129,6 +136,20 @@ export default {
                 this.loadingButtonInfo = false;
             } catch (error) {
                 alert(error);
+            }
+        },
+        setIdDoctor: function (id) {
+            this.iddoctor = id;
+        },
+        setIdBookList: function (id) {
+            this.idbooklist = id;
+        },
+        setList: function (id) {
+            let clone = [...this.list];
+            let index = clone.findIndex(dt => dt.idbooklist_main === id);
+            if (index !== -1) {
+                clone[index].status_book_list = 3;
+                this.list = clone;
             }
         },
         onChange: function (event) {
@@ -201,7 +222,7 @@ export default {
         }
     },
     computed: {
-        ...mapState(['user'])
+        ...mapState(['user', 'modalUser'])
     },
     mounted() {
         this.fetchData(this.user);
@@ -209,6 +230,9 @@ export default {
     watch: {
         user: function (newData) {
             this.fetchData(newData);
+        },
+        modalUser: function () {
+
         }
     }
 }

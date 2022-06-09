@@ -14,7 +14,7 @@
                                     @click="openModal()" class="orange">Thêm
                                 </li>
                             </ul>
-                            <input type="text" placeholder="Type" @input="onInput($event)">
+                            <input type="text" placeholder="Tìm kiếm thông tin" @input="onInput($event)">
                         </div>
                         <br />
                         <slot></slot>

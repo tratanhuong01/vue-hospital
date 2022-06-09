@@ -766,3 +766,35 @@ input::-webkit-inner-spin-button {
   bottom: 0;
   background-color: rgba(0, 0, 0, 0.711);
 }
+
+
+.item-doctor-image {
+  text-align: center;
+}
+
+.item-doctor-image img {
+  width: 18rem;
+  height: 18rem;
+  border-radius: 100rem;
+  object-fit: cover;
+}
+
+
+.item-doctor-info p {
+  color: black !important;
+  justify-content: center !important;
+  line-height: 2rem;
+}
+
+.item-doctor-info p:nth-child(1) {
+  font-weight: 600;
+  text-align: center;
+}
+
+.item-doctor-info p:nth-child(2),
+.item-doctor-info p:nth-child(3) {
+  font-weight: 600;
+  font-size: 1.3rem;
+  opacity: 0.6;
+  text-align: center;
+}

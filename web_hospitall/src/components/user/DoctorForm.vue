@@ -151,7 +151,6 @@ export default {
     },
     methods: {
         onSubmit: async function () {
-            console.log(this.book.date);
             this.fullname.error = this.fullname.value.length === 0;
             this.email.error = this.email.value.length === 0;
             this.phone.error = this.phone.value.length === 0;

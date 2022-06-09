@@ -17,11 +17,12 @@ class CreateMCommentBlogsTable extends Migration
             $table->increments('id');
             $table->integer('idblog')->index()->unsigned();
             $table->integer('iduser')->index()->unsigned();
+            $table->string('fullname');
             $table->string('content_comment');
             $table->timestamps();
 
             $table->foreign('idblog')->references('id')->on('m_blogs')->onDelete('cascade');
-            $table->foreign('idadmin')->references('id')->on('m__admins')->onDelete('cascade');
+            $table->foreign('iduser')->references('id')->on('m_users')->onDelete('cascade');
         });
     }
 

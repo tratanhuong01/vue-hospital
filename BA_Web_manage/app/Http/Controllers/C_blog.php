@@ -62,7 +62,7 @@ class C_blog extends Controller
 
     public function updateViewBlog(Request $request)
     {
-        DB::update('UPDATE m_blogs SET view = view + 1 WHERE id = ? ', [$request->id]);
+        DB::update('UPDATE m_blogs SET view = view + 1 WHERE slug_blog = ? ', [$request->slug]);
     }
 
     public function editBlog(Request $request)

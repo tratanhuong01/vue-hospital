@@ -20,8 +20,9 @@ export default {
             const index = [...this.currentData].findIndex(dt => dt.day === item.day && dt.month === item.month &&
                 dt.year === item.year);
             if (index !== -1) {
-                this.setCurrent([...this.currentData].filter(dt => dt.day !== item.day && dt.month !== item.month &&
-                    dt.year !== item.year));
+                let clone = [...this.currentData];
+                clone.splice(index, 1);
+                this.setCurrent(clone);
             }
             else {
                 this.setCurrent([...this.currentData, item]);
@@ -30,7 +31,6 @@ export default {
     },
     mounted() {
         (() => {
-            console.log(this.currentData);
             const date = new Date();
             let day = date.getDate();
             let month = date.getMonth() + 1;

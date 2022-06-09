@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\C_blog;
 use App\Http\Controllers\C_book_list;
+use App\Http\Controllers\C_group_chat;
 use App\Http\Controllers\User\C_User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -95,20 +96,23 @@ Route::post('/blog-search', 'C_blog@searchBlog');
 Route::post('/blogs', 'C_blog@addBlog');
 Route::put('/blogs', 'C_blog@editBlog');
 Route::delete('/blogs/{id}', 'C_blog@deleteBlog');
-Route::get('/update-view-blog/{id}', 'C_blog@updateViewBlog');
+Route::get('/update-view-blog/{slug}', 'C_blog@updateViewBlog');
 
 //dashboard 
 Route::get('/dashboard', function () {
     $cUser = new C_User;
     $cBlog = new C_blog;
     $cBookList = new C_book_list;
+    $cGroupChat = new C_group_chat;
     $user = $cUser->getAllUser();
     $blog = $cBlog->getBlog();
     $bookList = $cBookList->getAllBookList();
+    $groupChat = $cGroupChat->getAllGroupChat();
     return response()->json([
         'user' => $user,
         'blog' => $blog,
-        'bookList' => $bookList
+        'bookList' => $bookList,
+        'groupChat' => $groupChat
     ]);
 });
 
@@ -126,3 +130,12 @@ Route::post('groupChats', 'C_group_chat@addGroupChat');
 Route::get('chats/{idgroupchat}', 'C_chat@getChat');
 Route::get('chat-admin/{idadmin}', 'C_chat@getChatByIdAdmin');
 Route::post('chats', 'C_chat@addChat');
+
+// blog comment 
+Route::get('/commentBlogs/{slug}', 'C_comment_blog@getCommentBlogBySlug');
+Route::post('/commentBlogs', 'C_comment_blog@addCommentBlog');
+
+// reply user
+Route::get('/replyUsers/{id}', 'C_reply_user@getReplyUser');
+Route::post('/replyUsers', 'C_reply_user@addReplyUser');
+Route::post('/reply-user-check', 'C_reply_user@checkIsHaveReply');

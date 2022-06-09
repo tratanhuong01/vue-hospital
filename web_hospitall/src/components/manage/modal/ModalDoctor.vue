@@ -60,7 +60,6 @@
                         :selected="specicallist.value">
                         {{ special.namespecical }}
                     </option>
-
                 </select>
                 <span class="bx bx-chevron-down"></span>
             </div>
@@ -240,8 +239,8 @@ export default {
                         await Request.Post('/timedoctors', { ...this.current[index], idadmin: doctor.data.data.idadmin });
                     }
                 }
-                this.setList(doctor.data.data);
-                this.reset();
+                this.setList && this.setList(doctor.data.data);
+                this.reset && this.reset();
                 return true;
             } catch (error) {
                 console.log(error)
