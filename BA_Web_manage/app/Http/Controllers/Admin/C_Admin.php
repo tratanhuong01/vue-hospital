@@ -185,8 +185,16 @@ class C_Admin extends Controller
     {
         $result = DB::select("SELECT * , m__admins.id as 'idadmin'  FROM m__admins LEFT JOIN m_info_admins ON m__admins.id = 
         m_info_admins.idadmin INNER JOIN m_specical_lists ON  m_info_admins.idspecicallist = m_specical_lists.id 
-        WHERE m__admins.role != 0");
+        WHERE m__admins.role != 0 AND m_info_admins.is_online >= NOW() - interval 10 second");
         $number = mt_rand(0, sizeof($result));
         return response()->json(['data' => sizeof($result) === 0 ? null : $result[$number - 1 < 0 ? 0 : $number - 1]]);
+    }
+
+    public function updateOnline(Request $request)
+    {
+        DB::update(
+            "UPDATE m_info_admins SET is_online = NOW() WHERE m_info_admins.idadmin = ? ",
+            [$request->id]
+        );
     }
 }

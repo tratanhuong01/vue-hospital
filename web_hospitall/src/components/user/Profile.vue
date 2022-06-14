@@ -1,5 +1,6 @@
 <template>
-    <div v-if="user && !loading" class="wrapper profile">
+    <div>
+            <div v-if="user && !loading" class="wrapper profile">
         <p class="profile__title">Thông tin cá nhân</p>
         <div class="profile__top">
             <div class="profile__top--left">
@@ -23,6 +24,11 @@
                         <input @change="onChangeGender($event)" v-model="gender" value="Nữ" type="radio"
                             name="order-gender" id="">
                         <label for="">Nữ</label>
+                    </div>
+                    <div>
+                        <input @change="onChangeGender($event)" v-model="gender" value="Khác" type="radio"
+                            name="order-gender" id="">
+                        <label for="">Khác</label>
                     </div>
                 </div>
                 <InputComponent type="text" placeholder="Nhập số điện thoại" icon="bx bx-phone" :value="phone.value"
@@ -76,6 +82,7 @@
     </div>
     <ModalReplyBookList v-if="modalUser.data" :iddoctor="iddoctor" :idbooklist="idbooklist" :setList="setList">
     </ModalReplyBookList>
+    </div>
 </template>
 <script>
 import { mapMutations, mapState } from 'vuex';

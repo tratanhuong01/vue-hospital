@@ -26,17 +26,42 @@
                 </div>
             </div>
             <div class="flex">
-                <div class="w-50">
-                    <InputComponent placeholder="Nhập vị trí" type="text" icon="bx bx-leaf"
-                        :errorMessage="position.error ? 'Vị trí không được trống' : ''" :onChange="onChange"
-                        name="position" :value="position.value">
-                    </InputComponent>
+                <div class="w-50" style="display: flex;align-items: center;transform: translateY(-0.3rem);">
+                    <div class="select_admin">
+                        <select @change="onChange($event)" name="position" v-model="position.value">
+                            <option value="Tiến sĩ, Bác sĩ">
+                                Tiến sĩ, Bác sĩ
+                            </option>
+                            <option value="Thạc sĩ, Bác sĩ">
+                                Thạc sĩ, Bác sĩ
+                            </option>
+                            <option value="Giáo sư, Bác sĩ">
+                                Giáo sư, Bác sĩ
+                            </option>
+                            <option value="Tiến sĩ, Thạc sĩ, Bác sĩ">
+                                Tiến sĩ, Thạc , Bác sĩ
+                            </option>
+                            <option value="P. Tiến sĩ, Thạc sĩ, Bác sĩ">
+                                P. Tiến sĩ, Thạc sĩ, Bác sĩ
+                            </option>
+                            <option value="Giáo sư, Bác sĩ">
+                                Giáo sư, Tiến sĩ ,Bác sĩ
+                            </option>
+                        </select>
+                        <span class="bx bx-chevron-down"></span>
+                    </div>
+
                 </div>
-                <div class="w-50">
-                    <InputComponent placeholder="Nhập địa chỉ" type="text" icon="bx bx-location-plus"
-                        :errorMessage="address.error ? 'Địa chỉ không được trống' : ''" :onChange="onChange"
-                        name="address" :value="address.value">
-                    </InputComponent>
+                <div class="w-50" style="display: flex;align-items: center;transform: translateY(-0.3rem);">
+                    <div class="select_admin">
+                        <select @change="onChange($event)" name="address" v-model="address.value">
+                            <option v-for="item in addresses" :key="item.id" :value="item._name">
+                                {{ item._name }}
+                            </option>
+                        </select>
+                        <span class="bx bx-chevron-down"></span>
+                    </div>
+
                 </div>
             </div>
             <div class="flex">
@@ -147,7 +172,8 @@ export default {
             },
             data: null,
             current: [],
-            backupCurrent: []
+            backupCurrent: [],
+            addresses: []
         }
     },
     methods: {
@@ -273,6 +299,8 @@ export default {
                 result = await Request.Get(`/timedoctors/${this.id}`);
                 this.current = result.data.data;
                 this.backupCurrent = (result.data.data);
+                result = await Request.Get('/provinces');
+                this.addresses = result.data.data;
                 return true;
             } catch (error) {
                 alert(error);

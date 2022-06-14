@@ -21,6 +21,7 @@ class CreateMInfoAdminsTable extends Migration
             $table->string('position');
             $table->string('description_admin');
             $table->string('avatar');
+            $table->dateTime('is_online');
             $table->timestamps();
 
             $table->foreign('idspecicallist')->references('id')->on('m_specical_lists')->onDelete('cascade');

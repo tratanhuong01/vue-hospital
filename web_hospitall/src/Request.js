@@ -1,5 +1,5 @@
 const axios = require('axios');
-const Apiurl = 'http://127.0.0.1:8000/api';
+const Apiurl = 'http://localhost:8000/api';
 
 export default {
     GetHeader(m_auth) {
