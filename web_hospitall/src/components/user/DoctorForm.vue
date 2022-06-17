@@ -264,7 +264,7 @@ export default {
             });
         }
         else {
-            (async () => {
+            this.user ? (async () => {
                 try {
                     if (this.user) {
                         this.fullname.value = this.user.fullname;
@@ -277,6 +277,10 @@ export default {
                 } catch (error) {
                     alert(error);
                 }
+            })() : (() => {
+                this.$router.push({
+                    name: "Login"
+                });
             })();
         }
     },

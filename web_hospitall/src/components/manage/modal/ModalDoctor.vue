@@ -1,7 +1,7 @@
 <template>
-    <ModalAdmin :onSubmit="onSubmit" :title="'Bác sĩ'" :disabled="edit !== 3"
+    <ModalAdmin :onSubmit="onSubmit" :title="'Bác sĩ'" :disabled="edit !== 3 && admin?.role != 0"
         :nameButton="`${id ? 'Sửa' : 'Thêm'} bác sĩ`">
-        <div class="specicallist flex-space-between">
+        <div v-if="admin?.role != 0" class="specicallist flex-space-between">
             <label v-if="edit !== 1" class="left-0" @click="writeDescription(edit - 1)" for="">
                 Trở về
             </label>
@@ -99,10 +99,10 @@
                 </label>
             </div>
         </div>
-        <div v-if="edit === 2">
+        <div v-if="edit === 2 && admin?.role == 1">
             <VueEditor v-model="description.value" />
         </div>
-        <div v-if="edit === 3">
+        <div v-if="edit === 3 && admin?.role == 1">
             <ItemTimeDoctor :id="id" :setCurrent="setCurrent" :currentData="current" />
         </div>
     </ModalAdmin>
@@ -162,7 +162,7 @@ export default {
                 error: ''
             },
             description: {
-                value: '',
+                value: 'Chưa có mô tả',
                 error: ''
             },
             listTime: [],
@@ -274,7 +274,7 @@ export default {
         }
     },
     computed: {
-        ...mapState(['modal'])
+        ...mapState(['modal', 'admin'])
     },
     mounted() {
         (async () => {

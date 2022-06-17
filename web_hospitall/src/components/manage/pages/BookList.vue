@@ -10,7 +10,7 @@
     <Table :hideCrud="true" :title="'Danh sách lịch đặt khám'" :heading="['Tên khách hàng', 'Số điện thoại', 'Email', 'Tên bác sĩ', 'Giờ khám',
     'Ngày khám', 'Thời gian đặt', 'Tình trạng', 'Sửa']" :list="list" :loading="loading">
         <tr v-for="(item, index) in (
-            optionalActive.id === 'all' ? list : list.filter(dt => dt.status === optionalActive.value)
+            optionalActive.id === 'all' ? list : list.filter(dt => dt.status_book_list == optionalActive.value)
         )" :key="item.id">
             <td>{{ index + 1 }}</td>
             <td>

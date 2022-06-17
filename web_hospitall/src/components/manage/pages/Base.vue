@@ -116,7 +116,7 @@ export default {
                 await Request.Put('/update-online', {
                     id: this.admin?.id
                 });
-            }, 10000);
+            }, 30000);
         },
     },
     mounted() {
